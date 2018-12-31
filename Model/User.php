@@ -281,8 +281,9 @@ class User extends UsersAppModel {
 
 		//UsersLanguageのバリデーション実行
 		if (isset($this->data['UsersLanguage'])) {
-			$usersLanguage = $this->data['UsersLanguage'];
-			if (! $this->UsersLanguage->validateMany($usersLanguage)) {
+			// チェックボックスがある場合、arrayからstringへの変換をvalidateで行っている。
+			// そのため、値はvalidateに直でセットする
+			if (! $this->UsersLanguage->validateMany($this->data['UsersLanguage'])) {
 				$this->validationErrors = Hash::merge(
 					$this->validationErrors,
 					$this->UsersLanguage->validationErrors

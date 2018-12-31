@@ -24,6 +24,15 @@ App::uses('UsersAppModel', 'Users.Model');
 class UsersLanguage extends UsersAppModel {
 
 /**
+ * use behaviors
+ *
+ * @var array
+ */
+	public $actsAs = array(
+		'Users.UsersValidationRule',
+	);
+
+/**
  * Validation rules
  *
  * @var array
