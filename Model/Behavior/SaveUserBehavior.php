@@ -71,8 +71,12 @@ class SaveUserBehavior extends ModelBehavior {
 				continue;
 			}
 
+			// 登録時はuserIdないため、ここスルーされる。
+			// 更新時は、チェックボックスなど会員追加項目は、$model->data[UsersLanguage]にセットされるため、そちらを見る
 			$userId = Hash::get($model->data, array($model->alias, 'id'));
-			if ($userId && ! isset($model->data[$model->alias][$userAttributeKey])) {
+			if ($userId &&
+					! isset($model->data[$model->alias][$userAttributeKey]) &&
+					! isset($model->data[$model->UsersLanguage->alias][0][$userAttributeKey])) {
 				continue;
 			}
 			$this->__setValidates($model, $userAttribute);
