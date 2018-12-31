@@ -174,11 +174,21 @@ class SaveUserBehavior extends ModelBehavior {
 
 		//必須チェック
 		if ($userAttribute['UserAttributeSetting']['required']) {
-			$validates['notBlank'] = array(
-				'rule' => array('notBlank'),
-				'message' => sprintf(__d('net_commons', 'Please input %s.'), $userAttributeName),
-				'required' => false
-			);
+			if ($userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_CHECKBOX) {
+				//チェックボックスタイプ
+				$validates['multiple'] = array(
+					'rule' => array('multiple', array('min' => 1)),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), $userAttributeName),
+					'required' => false
+				);
+			} else {
+				//それ以外
+				$validates['notBlank'] = array(
+					'rule' => array('notBlank'),
+					'message' => sprintf(__d('net_commons', 'Please input %s.'), $userAttributeName),
+					'required' => false
+				);
+			}
 		}
 
 		//重複チェック
