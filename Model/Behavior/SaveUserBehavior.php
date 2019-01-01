@@ -290,7 +290,7 @@ class SaveUserBehavior extends ModelBehavior {
 		//UsersLanguage登録
 		$usersLanguages = Hash::get($model->data, 'UsersLanguage', array());
 		if ($created) {
-			$usersLanguages = Hash::insert($usersLanguages, '{n}.user_id', $model->data['User']['id']);
+			$usersLanguages = Hash::insert($usersLanguages, '{n}.UsersLanguage.user_id', $model->data['User']['id']);
 		}
 		foreach ($usersLanguages as $index => $usersLanguage) {
 			if (! $ret = $model->UsersLanguage->save($usersLanguage, false, false)) {
