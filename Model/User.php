@@ -549,7 +549,7 @@ class User extends UsersAppModel {
 			'PluginsRole' => 'PluginManager.PluginsRole',
 			'User' => 'Users.User',
 		]);
-		$roleKeys = $this->PluginsRole->find('list', array(
+		$roleKeys = $this->PluginsRole->cacheFindQuery('list', array(
 			'recursive' => -1,
 			'fields' => array('id', 'role_key'),
 			'conditions' => array(
