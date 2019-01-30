@@ -91,7 +91,11 @@ NetCommonsApp.controller('User.select',
         /**
          * 選択したユーザを保持する配列
          */
-        $scope.selectors = options['selectors'];
+        if (!angular.isArray(options['selectors'])) {
+          $scope.selectors = [];
+        } else {
+          $scope.selectors = options['selectors'];
+        }
 
         /**
          * Post data
