@@ -258,7 +258,7 @@ class ImportExportBehavior extends ModelBehavior {
  * @param Model $model 呼び出しもとのModel
  * @param array $options エクスポートのオプション
  * @param array $queryParams 絞り込みによる条件配列(リクエストデータ)
- * @return object
+ * @return bool
  */
 	public function exportUsers(Model $model, $options = array(), $queryParams = array()) {
 		App::uses('CsvFileWriter', 'Files.Utility');
@@ -276,45 +276,34 @@ class ImportExportBehavior extends ModelBehavior {
 		$joins = $model->UserSearch->getSearchJoinTables(
 			Hash::get($options, 'joins', array()), $conditions
 		);
+		$conditions = $model->UserSearch->getSearchConditions(Hash::get($options, 'conditions', []));
 
-		// Max1000件しか出力できていなかったので、ループして該当データを全て出力できるようにロジック組み換え
-		$conditions = $model->UserSearch->getSearchConditions($conditions);
-
-		// CSVヘッダを出力する
-		$csvWriter = new CsvFileWriter(array('header' => $header));
-
-		// エクスポート対象のユーザーIDを検索する為の条件設定
-		$userIdsParams = array(
+		$userIds = $model->find('list', array(
 			'recursive' => -1,
 			'conditions' => $conditions,
 			'joins' => $joins,
 			'group' => 'User.id',
 			'limit' => self::MAX_LIMIT,
-			'offset' => 0,
 			'order' => array('Role.id' => 'asc')
-		);
+		));
 
-		// ユーザーID取得繰り返し処理実施
-		while ($userIds = $model->find('list', $userIdsParams)) {
-			// ユーザー情報取得用条件設定
-			$usersParams = array(
-				'fields' => array_keys($header),
-				'recursive' => 0,
-				'conditions' => array('User.id' => array_values($userIds)),
-				'order' => array('Role.id' => 'asc')
-			);
+		$users = $model->find('all', array(
+			'fields' => array_keys($header),
+			'recursive' => 0,
+			'conditions' => array(
+				'User.id' => array_values($userIds),
+			),
+			'order' => array('Role.id' => 'asc')
+		));
 
-			// ユーザー情報取得実施
-			$users = $model->find('all', $usersParams);
-
-			// 取得したユーザー情報をCSV出力する
-			foreach ($users as $user) {
-				$user = Hash::insert($user, 'User.password', '');
-				$csvWriter->addModelData( $user );
-			}
-
-			// オフセットを再設定
-			$userIdsParams['offset'] += self::MAX_LIMIT;
+		$csvWriter = new CsvFileWriter(array('header' => $header));
+		if (! $users && ! is_array($users)) {
+			$csvWriter->close();
+			return false;
+		}
+		foreach ($users as $user) {
+			$user = Hash::insert($user, 'User.password', '');
+			$csvWriter->addModelData($user);
 		}
 
 		$csvWriter->close();
