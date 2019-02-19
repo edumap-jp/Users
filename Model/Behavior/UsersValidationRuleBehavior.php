@@ -72,6 +72,11 @@ class UsersValidationRuleBehavior extends ModelBehavior {
 		$field = array_keys($check)[0];
 		$values = array_shift($check);
 
+		// 会員登録時はarrayでくる。会員登録インポート時だけstringでくるため、arrayに変換
+		if (is_string($values)) {
+			$values = explode("\n", $values);
+		}
+
 		foreach ($values as $value) {
 			if (! in_array($value, $inList, true)) {
 				return false;
