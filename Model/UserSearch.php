@@ -400,7 +400,13 @@ class UserSearch extends UserSearchAppModel {
 						'is_avatar_auto_created' => true,
 					);
 				}
-
+			} elseif (Hash::get($this->readableFields[$field], 'data_type') === DataType::DATA_TYPE_CHECKBOX) {
+				// add by mutaguchi@opensource-workshop.jp
+				// TODO 試し実装. 本来チェックボックスの検索なんですが、暫定的にチェックボックスの値をセレクトボックスにして検索できるパッチ
+				// チェックボックスはDBカラムに改行区切りで値が格納されるため、LIKE検索する
+//				$conditions[count($conditions)]['AND'] = array(
+//					$sqlField . ' LIKE' => '%' . $value . '%'
+//				);
 			} elseif ($setting === self::MORE_THAN_DAYS) {
 				$conditions[count($conditions)]['OR'] = array(
 					$sqlField => null,

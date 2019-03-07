@@ -167,6 +167,30 @@ class UserSearchFormHelper extends AppHelper {
 	private function __inputCheckbox($dataTypeKey, $userAttribute, $options) {
 		$html = '';
 
+		//チェックボックス
+		//$html .= $this->NetCommonsForm->checkbox($userAttribute['UserAttribute']['key'] . '[]', array(
+		$html .= $this->NetCommonsForm->checkbox($userAttribute['UserAttribute']['key'], array(
+			'options' => $options,
+			//'label' => false,
+			'div' => array('class' => 'form-inline'),
+			'inline' => true,
+			//'error' => false,
+		));
+
+		// TODO 試し実装. 本来チェックボックスの検索なんですが、暫定的にチェックボックスの値をセレクトボックスにして検索できるパッチ
+		//暫定対応:セレクトボックス
+//		if ($options) {
+//			$options = array('' => __d('net_commons', '-- Not specified --')) + $options;
+//		}
+//		$html .= $this->NetCommonsForm->input($userAttribute['UserAttribute']['key'], array(
+//			'type' => 'select',
+//			'options' => $options,
+//			'label' => false,
+//			'div' => array('class' => 'col-xs-9'),
+//			'error' => false,
+//			'class' => 'form-control input-sm',
+//		));
+
 		return $html;
 	}
 
