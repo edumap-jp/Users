@@ -10,7 +10,6 @@
  */
 
 App::uses('ModelBehavior', 'Model');
-App::uses('CurrentSystem', 'NetCommons.Utility');
 App::uses('Space', 'Rooms.Model');
 
 /**
@@ -270,7 +269,9 @@ class SaveUserBehavior extends ModelBehavior {
 	public function beforeSave(Model $model, $options = array()) {
 		//インストール時は、言語のCurrentデータをセットする
 		if (! Configure::read('NetCommons.installed')) {
-			(new CurrentSystem())->setLanguage();
+			//@var $instance Current
+			$instance = Current::getInstance();
+			$instance->setCurrentLanguage();
 		}
 
 		return true;
