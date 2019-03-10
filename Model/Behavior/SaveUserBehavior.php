@@ -10,7 +10,6 @@
  */
 
 App::uses('ModelBehavior', 'Model');
-App::uses('CurrentSystem', 'NetCommons.Utility');
 App::uses('Space', 'Rooms.Model');
 
 /**
