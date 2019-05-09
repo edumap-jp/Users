@@ -303,7 +303,7 @@ class User extends UsersAppModel {
 	protected function _setUsernameValidate() {
 		//ログインID
 		if (! Hash::get($this->data, 'User.id')) {
-			$this->validate = Hash::merge($this->validate, array(
+			$this->validate = ValidateMerge::merge($this->validate, array(
 				'username' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
@@ -344,7 +344,7 @@ class User extends UsersAppModel {
 		if (Hash::get($this->data['User'], 'password') || ! isset($this->data['User']['id']) ||
 				Hash::get($options, 'validatePassword', false)) {
 
-			$this->validate = Hash::merge($this->validate, array(
+			$this->validate = ValidateMerge::merge($this->validate, array(
 				'password' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
@@ -386,7 +386,7 @@ class User extends UsersAppModel {
 			));
 
 			if (Hash::get($options, 'self', false)) {
-				$this->validate = Hash::merge($this->validate, array(
+				$this->validate = ValidateMerge::merge($this->validate, array(
 					'password_current' => array(
 						'notBlank' => array(
 							'rule' => array('notBlank'),

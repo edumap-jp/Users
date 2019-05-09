@@ -83,7 +83,7 @@ class SaveUserBehavior extends ModelBehavior {
 
 		//emailの重複チェック
 		$emails = $this->getEmailFields($model);
-		$model->validate = Hash::merge($model->validate, array(
+		$model->validate = ValidateMerge::merge($model->validate, array(
 			'email' => array(
 				'notDuplicate' => array(
 					'rule' => array('notDuplicate', $emails),
