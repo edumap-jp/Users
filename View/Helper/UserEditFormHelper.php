@@ -351,6 +351,9 @@ class UserEditFormHelper extends AppHelper {
 				} else {
 					$attributes = Hash::merge(['again' => true], $attributes);
 				}
+				if (! isset($attributes['autocomplete'])) {
+					$attributes['autocomplete'] = 'new-password';
+				}
 
 				$output .= '<div class="col-xs-12 col-sm-9">';
 				$output .= $this->NetCommonsForm->input($fieldName, $attributes);

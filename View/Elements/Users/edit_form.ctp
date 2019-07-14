@@ -36,7 +36,6 @@
 			}
 		?>
 
-		<input type="password" value="" class="hidden">
 		<?php echo $this->UserAttributeLayout->renderRow($element); ?>
 	</div>
 </div>
