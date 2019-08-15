@@ -65,7 +65,20 @@ class UserLayoutHelper extends AppHelper {
 				$userAttribute['UserAttributeSetting']['data_type_key'] === DataType::DATA_TYPE_IMG) {
 			$fieldName = 'User.' . $userAttributeKey;
 		} elseif ($this->UsersLanguage->hasField($userAttributeKey)) {
-			$fieldName = 'UsersLanguage.%s.' . $userAttributeKey;
+			// Hash::get()には%sは使えない & 複数マッチしてもkeyとして機能しないため、多言語対応を意識して、
+			// ここでlanguage_idを1つに特定して、fieldNameをセットする
+			// $fieldName = 'UsersLanguage.%s.' . $userAttributeKey;
+			$fieldName = '';
+			foreach ($this->_View->viewVars['user']['UsersLanguage'] as $arrayIndex => $usersLanguage) {
+				if ($usersLanguage['language_id'] == Current::read('Language.id')) {
+					$fieldName = 'UsersLanguage.' . $arrayIndex . '.' . $userAttributeKey;
+					break;
+				}
+			}
+			if (!$fieldName) {
+				// 空なら0番目をセット
+				$fieldName = 'UsersLanguage.0.' . $userAttributeKey;
+			}
 		} else {
 			$fieldName = '';
 		}
@@ -144,13 +157,22 @@ class UserLayoutHelper extends AppHelper {
 				$element .= $this->_getUserElementByCheckboxType($fieldName, $userAttribute);
 
 			} else {
+				// key or codeが空の場合、値を表示しない場合に対応
+				$keyOrCode = Hash::get($this->_View->viewVars['user'], $fieldName);
 				if ($userAttributeKey === 'role_key') {
-					$keyPath = '{n}[key=' . Hash::get($this->_View->viewVars['user'], $fieldName) . ']';
+					// $keyPath = '{n}[key=' . Hash::get($this->_View->viewVars['user'], $fieldName) . ']';
+					$keyPath = '{n}[key=' . $keyOrCode . ']';
 				} else {
-					$keyPath = '{n}[code=' . Hash::get($this->_View->viewVars['user'], $fieldName) . ']';
+					// $keyPath = '{n}[code=' . Hash::get($this->_View->viewVars['user'], $fieldName) . ']';
+					$keyPath = '{n}[code=' . $keyOrCode . ']';
 				}
-				$option = Hash::extract($userAttribute['UserAttributeChoice'], $keyPath);
-				$element .= h($option[0]['name']);
+				if ($keyOrCode) {
+					$option = Hash::extract($userAttribute['UserAttributeChoice'], $keyPath);
+					$element .= h($option[0]['name']);
+				} else {
+					// key or codeが空の場合、値を表示しない
+					$element .= ' ';
+				}
 			}
 
 		} elseif ($this->UsersLanguage->hasField($userAttributeKey)) {
