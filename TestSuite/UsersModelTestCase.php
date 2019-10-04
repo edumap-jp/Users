@@ -83,12 +83,67 @@ abstract class UsersModelTestCase extends NetCommonsModelTestCase {
 	}
 
 /**
+ * ログイン処理
+ *
+ * @param string $roleKey ロールキー
+ * @return void
+ */
+	protected function _loginByRoleKey($roleKey) {
+		$user = TestAuthGeneral::$roles[$roleKey];
+
+		$userLibInstance = CurrentLibUser::getInstance();
+		$reflectionClass = new ReflectionClass('CurrentLibUser');
+		$property = $reflectionClass->getProperty('__user');
+		$property->setAccessible(true);
+		$property->setValue($userLibInstance, $user);
+
+		CurrentLib::write('User.id', $user['id']);
+		CurrentLib::write('User.role_key', $user['role_key']);
+	}
+
+/**
+ * ログイン処理
+ *
+ * @param array $user ユーザ情報
+ * @return void
+ */
+	protected function _login($user) {
+		$userLibInstance = CurrentLibUser::getInstance();
+		$reflectionClass = new ReflectionClass('CurrentLibUser');
+		$property = $reflectionClass->getProperty('__user');
+		$property->setAccessible(true);
+		$property->setValue($userLibInstance, $user);
+
+		CurrentLib::write('User.id', $user['id']);
+		CurrentLib::write('User.role_key', $user['role_key']);
+	}
+
+/**
+ * setUp method
+ *
+ * @return void
+ */
+	public function setUp() {
+		parent::setUp();
+
+		UserAttribute::$userAttributes = null;
+		CurrentLibPlugin::clear();
+	}
+
+/**
  * tearDown method
  *
  * @return void
  */
 	public function tearDown() {
 		UserAttribute::$userAttributes = array();
+
+		$userLibInstance = CurrentLibUser::getInstance();
+		$reflectionClass = new ReflectionClass('CurrentLibUser');
+		$property = $reflectionClass->getProperty('__user');
+		$property->setAccessible(true);
+		$property->setValue($userLibInstance, null);
+
 		parent::tearDown();
 	}
 
