@@ -151,14 +151,13 @@ class SaveUserBehavior extends ModelBehavior {
 		if ($userId !== Current::read('User.id') && ! $userAttributesRole['other_editable'] ||
 				$userId === Current::read('User.id') && !
 					$userAttributesRole['self_editable'] && Hash::extract($model->data, $pathKey)) {
-			throw new BadRequestException(__d('net_commons', 'Bad Request 2'));
+			throw new BadRequestException(__d('net_commons', 'Bad Request'));
 		}
 
 		//管理者しか許可しない項目のチェック⇒不正エラーとする
 		if ($userAttribute['UserAttributeSetting']['only_administrator_editable'] &&
 				! Current::allowSystemPlugin('user_manager') && Hash::extract($model->data, $pathKey)) {
-
-			throw new BadRequestException(__d('net_commons', 'Bad Request 1'));
+			throw new BadRequestException(__d('net_commons', 'Bad Request'));
 		}
 	}
 
@@ -291,7 +290,9 @@ class SaveUserBehavior extends ModelBehavior {
 		//UsersLanguage登録
 		$usersLanguages = Hash::get($model->data, 'UsersLanguage', array());
 		if ($created) {
-			$usersLanguages = Hash::insert($usersLanguages, '{n}.UsersLanguage.user_id', $model->data['User']['id']);
+			$usersLanguages = Hash::insert(
+				$usersLanguages, '{n}.UsersLanguage.user_id', $model->data['User']['id']
+			);
 		}
 		foreach ($usersLanguages as $index => $usersLanguage) {
 			if (! $ret = $model->UsersLanguage->save($usersLanguage, false, false)) {
