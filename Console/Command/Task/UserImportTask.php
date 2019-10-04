@@ -49,9 +49,17 @@ class UserImportTask extends AppShell {
 
 		$user = $this->User->findById(1);
 		CakeSession::write(AuthComponent::$sessionKey, $user['User']);
+		//@var CakeRequest $request
 		$request = new CakeRequest();
+		//@var Controller $Controller
 		$controller = new Controller($request);
-		Current::initialize($controller);
+		$controller->Session = $controller->Components->load('Session');
+		//@codeCoverageIgnoreStart
+		if (empty($this->CurrentLib)) {
+			$this->CurrentLib = CurrentLib::getInstance();
+		}
+		//@codeCoverageIgnoreEnd
+		$this->CurrentLib->initialize($controller);
 
 		if (! $this->User->importUsers($file)) {
 			//バリデーションエラーの場合
