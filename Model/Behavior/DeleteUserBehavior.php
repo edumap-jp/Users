@@ -34,9 +34,19 @@ class DeleteUserBehavior extends ModelBehavior {
 
 		$model->loadModels([
 			'UploadFile' => 'Files.UploadFile',
+			'PrivateSpace' => 'PrivateSpace.PrivateSpace',
+			'Room' => 'Rooms.Room',
+			'RoomDeleteRelatedTable' => 'Rooms.RoomDeleteRelatedTable',
 		]);
 
 		try {
+			//プライベートルームのデータを削除する
+			$privateRoom = $model->PrivateSpace->getPrivateRoomByUserId($data['User']['id']);
+			if (isset($privateRoom['Room']['id'])) {
+				$model->Room->deleteRoom($privateRoom);
+				$model->RoomDeleteRelatedTable->insertUser($data['User']['id'], $privateRoom['Room']['id']);
+			}
+
 			//Userデータの削除->論理削除
 			$user = $model->create(array(
 				'id' => $data['User']['id'],
@@ -86,21 +96,10 @@ class DeleteUserBehavior extends ModelBehavior {
 				$model->$modelName->alias . '.user_id' => $userId
 			);
 			if (! $model->$modelName->deleteAll($conditions, false)) {
+				CakeLog::error("[user deleting] {$modelName}->deleteAll user_id={$userId}");
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 		}
-
-		////user_idがついているテーブルに対して削除する(必要ない？)
-		//$tables = $model->query('SHOW TABLES');
-		//foreach ($tables as $table) {
-		//	$tableName = array_shift($table['TABLE_NAMES']);
-		//	$columns = $model->query('SHOW COLUMNS FROM ' . $tableName);
-		//	if (! Hash::check($columns, '{n}.COLUMNS[Field=user_id]')) {
-		//		continue;
-		//	}
-		//
-		//	$model->query('DELETE FROM ' . $tableName . ' WHERE user_id = ' . $userId);
-		//}
 
 		return true;
 	}
