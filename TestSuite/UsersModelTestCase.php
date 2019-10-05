@@ -11,7 +11,9 @@
 
 App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
 App::uses('UserAttribute', 'UserAttributes.Model');
-App::uses('Current', 'NetCommons.Utility');
+App::uses('CurrentLib', 'NetCommons.Lib');
+App::uses('CurrentLibUser', 'NetCommons.Lib');
+App::uses('CurrentLibPlugin', 'NetCommons.Lib');
 
 /**
  * SaveUserBehavior::getEmailFields()のテスト
@@ -91,23 +93,6 @@ abstract class UsersModelTestCase extends NetCommonsModelTestCase {
 	protected function _loginByRoleKey($roleKey) {
 		$user = TestAuthGeneral::$roles[$roleKey];
 
-		$userLibInstance = CurrentLibUser::getInstance();
-		$reflectionClass = new ReflectionClass('CurrentLibUser');
-		$property = $reflectionClass->getProperty('__user');
-		$property->setAccessible(true);
-		$property->setValue($userLibInstance, $user);
-
-		CurrentLib::write('User.id', $user['id']);
-		CurrentLib::write('User.role_key', $user['role_key']);
-	}
-
-/**
- * ログイン処理
- *
- * @param array $user ユーザ情報
- * @return void
- */
-	protected function _login($user) {
 		$userLibInstance = CurrentLibUser::getInstance();
 		$reflectionClass = new ReflectionClass('CurrentLibUser');
 		$property = $reflectionClass->getProperty('__user');

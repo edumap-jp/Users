@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
+App::uses('UsersValidateTestCase', 'Users.TestSuite');
 
 /**
  * User::_setUsernameValidate()のテスト
@@ -17,7 +17,7 @@ App::uses('NetCommonsModelTestCase', 'NetCommons.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Users\Test\Case\Model\User
  */
-class UserPrivateSetUsernameValidateTest extends NetCommonsModelTestCase {
+class UserPrivateSetUsernameValidateTest extends UsersValidateTestCase {
 
 /**
  * Fixtures
@@ -58,6 +58,8 @@ class UserPrivateSetUsernameValidateTest extends NetCommonsModelTestCase {
  */
 	public function setUp() {
 		parent::setUp();
+
+		$this->_loginByRoleKey('system_administrator');
 	}
 
 /**
