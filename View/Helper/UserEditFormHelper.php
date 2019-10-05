@@ -325,6 +325,7 @@ class UserEditFormHelper extends AppHelper {
  * @param array $divOuter 外側のDIVタグ
  * @return string HTML 入力HTML
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	private function __inputDataType($fieldName, $userAttribute, $attributes, $divOuter) {
 		$output = '';
