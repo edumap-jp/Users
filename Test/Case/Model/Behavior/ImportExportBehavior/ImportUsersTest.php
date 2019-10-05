@@ -50,6 +50,8 @@ class ImportExportBehaviorImportUsersTest extends UsersModelTestCase {
 		Current::write('Language.id', '2');
 		Current::write('User.role_key', 'system_administrator');
 		Current::write('PluginsRole.1.plugin_key', 'user_manager');
+
+		$this->_loginByRoleKey('system_administrator');
 	}
 
 /**
