@@ -47,8 +47,16 @@ class UserImportTask extends AppShell {
 			return;
 		}
 
-		$user = $this->User->findById(1);
-		CakeSession::write(AuthComponent::$sessionKey, $user['User']);
+		//@codeCoverageIgnoreStart
+		//
+		//travisでsessionのエラーになってしまうため、テストはセットしないようにする
+		//@see https://travis-ci.org/NetCommons3/Users/jobs/593862204#L879-L894
+		if (substr(get_class($this), 0, 5) !== 'Mock_') {
+			$user = $this->User->findById(1);
+			CakeSession::write(AuthComponent::$sessionKey, $user['User']);
+		}
+		//@codeCoverageIgnoreEnd
+
 		//@var CakeRequest $request
 		$request = new CakeRequest();
 		//@var Controller $Controller
