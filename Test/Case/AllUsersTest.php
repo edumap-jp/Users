@@ -30,7 +30,7 @@ class AllUsersTest extends NetCommonsTestSuite {
 		$suite = new NetCommonsTestSuite(sprintf('All %s Plugin tests', $plugin));
 
 		//テストの順番を確認するためのもの
-		$Folder = new Folder(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . DS . 'Controller');
+		$Folder = new Folder(CakePlugin::path($plugin) . 'Test' . DS . 'Case');
 		$files = $Folder->tree(null, true, 'files');
 		foreach ($files as $file) {
 			if (preg_match('/\/All([\w]+)Test\.php$/', $file)) {
