@@ -29,19 +29,6 @@ class AllUsersTest extends NetCommonsTestSuite {
 		$plugin = preg_replace('/^All([\w]+)Test$/', '$1', __CLASS__);
 		$suite = new NetCommonsTestSuite(sprintf('All %s Plugin tests', $plugin));
 
-		//テストの順番を確認するためのもの
-		$Folder = new Folder(CakePlugin::path($plugin) . 'Test' . DS . 'Case');
-		$files = $Folder->tree(null, true, 'files');
-		foreach ($files as $file) {
-			if (preg_match('/\/All([\w]+)Test\.php$/', $file)) {
-				continue;
-			}
-			if (substr($file, -8) === 'Test.php') {
-				var_dump($file);
-			}
-		}
-
-
 		//$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/UserPermissionBehavior/CanUserEditTest.php');
 		//$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/UserPermissionBehavior/CanUserReadTest.php');
 		//$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Model/Behavior/SaveUserBehavior/PrivateSetInvalidatesTest.php');
@@ -62,7 +49,7 @@ class AllUsersTest extends NetCommonsTestSuite {
 		//$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Console/Command/UsersShell/MainTest.php');
 		//$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Console/Command/UsersShell/StartupTest.php');
 		//$suite->addTestFile(CakePlugin::path($plugin) . 'Test' . DS . 'Case' . '/Config/RoutesTest.php');
-		//$suite->addTestDirectoryRecursive(CakePlugin::path($plugin) . 'Test' . DS . 'Case');
+		$suite->addTestDirectoryRecursive(CakePlugin::path($plugin) . 'Test' . DS . 'Case');
 		return $suite;
 	}
 }
