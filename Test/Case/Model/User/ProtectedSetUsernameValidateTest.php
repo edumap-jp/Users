@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('UsersValidateTestCase', 'Users.TestSuite');
+App::uses('UsersModelTestCase', 'Users.TestSuite');
 
 /**
  * User::_setUsernameValidate()のテスト
@@ -17,7 +17,7 @@ App::uses('UsersValidateTestCase', 'Users.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Users\Test\Case\Model\User
  */
-class UserPrivateSetUsernameValidateTest extends UsersValidateTestCase {
+class UserPrivateSetUsernameValidateTest extends UsersModelTestCase {
 
 /**
  * Fixtures

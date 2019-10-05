@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('UsersValidateTestCase', 'Users.TestSuite');
+App::uses('UsersModelTestCase', 'Users.TestSuite');
 
 /**
  * User::_setPasswordValidate()のテスト
@@ -17,7 +17,7 @@ App::uses('UsersValidateTestCase', 'Users.TestSuite');
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @package NetCommons\Users\Test\Case\Model\User
  */
-class UserProtectedSetPasswordValidateTest extends UsersValidateTestCase {
+class UserProtectedSetPasswordValidateTest extends UsersModelTestCase {
 
 /**
  * Fixtures
