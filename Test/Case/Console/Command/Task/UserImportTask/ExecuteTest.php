@@ -29,6 +29,7 @@ class UsersConsoleCommandTaskUserImportTaskExecuteTest extends NetCommonsConsole
 		'plugin.pages.page_container',
 		'plugin.pages.pages_language',
 		'plugin.plugin_manager.plugins_role',
+		'plugin.plugin_manager.plugins_room',
 		'plugin.roles.default_role_permission',
 		'plugin.rooms.room_role_permission',
 		'plugin.rooms.space',
