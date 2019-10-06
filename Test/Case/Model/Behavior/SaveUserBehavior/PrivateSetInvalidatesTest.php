@@ -454,8 +454,10 @@ class SaveUserBehaviorPrivateSetInvalidatesTest extends UsersModelTestCase {
 		//テストデータ
 		$this->TestUser->set($data);
 		Current::write('User.id', $loginUser);
+
 		if ($userManager) {
 			Current::write('PluginsRole.0.plugin_key', 'user_manager');
+			$this->_loginByRoleKey('system_administrator');
 		}
 
 		//テスト実施

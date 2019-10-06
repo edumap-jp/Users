@@ -47,6 +47,7 @@ class UserLayoutHelper extends AppHelper {
  *
  * @param array $userAttribute ユーザ属性データ
  * @return string HTMLタグ
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 	public function display($userAttribute) {
 		$html = '';
