@@ -75,6 +75,7 @@ class ImportExportBehavior extends ModelBehavior {
  */
 	public function importUsers(Model $model, $filePath, $importType = self::IMPORT_TYPE_NEW) {
 		App::uses('CsvFileReader', 'Files.Utility');
+		App::uses('AngularParser', 'NetCommons.Lib');
 
 		$model->begin();
 		$model->prepare(true);
@@ -97,6 +98,7 @@ class ImportExportBehavior extends ModelBehavior {
 				continue;
 			}
 
+			AngularParser::parse($data);
 			$data = $this->_convSaveData($model, $data);
 
 			$model->set($data);
