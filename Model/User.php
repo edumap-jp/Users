@@ -341,35 +341,34 @@ class User extends UsersAppModel {
  */
 	protected function _setPasswordValidate($options = array()) {
 		//パスワード
-		if (! Configure::read('NetCommons.installed')) {
-			return;
-		}
 		if (Hash::get($this->data['User'], 'password') || ! isset($this->data['User']['id']) ||
 				Hash::get($options, 'validatePassword', false)) {
 
 			$this->validate = ValidateMerge::merge($this->validate, array(
-				'password' => [
-					'blankCheck' => [
-						'rule' => 'notBlank',
-						'message' => __d('em_subscriptions', 'パスワードを入力してください'),
+				'password' => array(
+					'notBlank' => array(
+						'rule' => array('notBlank'),
+						'message' => sprintf(
+							__d('net_commons', 'Please input %s.'), __d('users', 'password')
+						),
+						'allowEmpty' => false,
+						'required' => true,
+					),
+					'alphaNumericSymbols' => array(
+						'rule' => array('alphaNumericSymbols', false),
+						'message' => sprintf(
+							__d('net_commons', 'Only alphabets, numbers and symbols are allowed to use for %s.'),
+							__d('users', 'password')
+						),
+						'allowEmpty' => false,
+						'required' => true,
+					),
+					'minLength' => array(
+						'rule' => array('minLength', 4),
+						'message' => __d('net_commons', 'Please choose at least %s characters string.', 4),
 						'required' => true
-					],
-					'alphaNumericSymbolCheck' => [
-						'rule' => ['alphaNumericSymbols'],
-						'message' => __d('em_subscriptions', 'パスワードは半角英数字、記号のみ入力してください'),
-						'required' => true
-					],
-					'betweenCheck' => [
-						'rule' => ['lengthBetween', 10, 128],
-						'message' => __d('em_subscriptions', 'パスワードは10文字以上で入力してください'),
-						'required' => true
-					],
-					'alphabetNumberCheck' => [
-						'rule' => ['customValidatePassword'],
-						'message' => __d('em_subscriptions', 'パスワードは、半角で英字の大文字・小文字、数字、記号の4種類すべてを1文字以上含めてください'),
-						'required' => true
-					]
-				],
+					)
+				),
 				'password_again' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
@@ -411,31 +410,6 @@ class User extends UsersAppModel {
 			//会員の編集時、パスワードを空にした場合、unsetする。
 			unset($this->data['User']['password']);
 		}
-	}
-
-/**
- * カスタムバリデーション
- * パスワードに、半角英字の大文字、小文字、数字、記号の各4種類が1文字以上含まれているかチェックする
- *
- * @param array $check [ カラム名 => 入力値 ]が自動的に入る
- * @return bool バリデート結果
- */
-	public function customValidatePassword($check) {
-		//各正規表現を用意
-		$patterns = [
-			'/[a-z]/',
-			'/[A-Z]/',
-			'/\d/',
-			'/[' . preg_quote('_-<>,.$%#@!\'"+&?=~:;|][()*^{}/', '/') . ']/'
-		];
-
-		foreach ($patterns as $pattern) {
-			if (!preg_match($pattern, $check['password'])) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 /**
