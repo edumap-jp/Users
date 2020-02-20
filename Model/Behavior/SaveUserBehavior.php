@@ -414,7 +414,9 @@ class SaveUserBehavior extends ModelBehavior {
 			if (! $model->updateAll($update, $conditions)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
+			$model->invalidateCDN = false;
 			$model->commit();
+			$model->invalidateCDN = true;
 
 		} catch (Exception $ex) {
 			$model->rollback($ex);
