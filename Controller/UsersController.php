@@ -254,7 +254,7 @@ class UsersController extends UsersAppController {
 			//メール通知の場合、NetCommonsMailUtilityをメンバー変数にセットする。Mockであれば、newをしない。
 			//テストでMockに差し替えが必要なための処理であるので、カバレッジレポートから除外する。
 			//@codeCoverageIgnoreStart
-			if (substr(get_class($this->mail), 0, 4) !== 'Mock') {
+			if (! isset($this->mail) || substr(get_class($this->mail), 0, 4) !== 'Mock') {
 				$this->mail = new NetCommonsMail();
 			}
 			//@codeCoverageIgnoreEnd
