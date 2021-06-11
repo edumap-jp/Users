@@ -75,6 +75,10 @@ class UserSearchAppModel extends UsersAppModel {
 			}
 		}
 
+		if (empty($userAttr)) {
+			return;
+		}
+
 		$label = $userAttr['name'];
 
 		//Fieldのチェック
